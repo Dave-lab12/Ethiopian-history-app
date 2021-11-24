@@ -1,21 +1,115 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { StyleSheet } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Home from "./Screens/Home";
+import Reader from "./Screens/Reding";
+import Discover from "./Screens/Discover";
+import Favorites from "./Screens/Favorites";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+const Tab = createBottomTabNavigator();
+
+function MyTabs() {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: {
+          height: 60,
+          position: "absolute",
+          bottom: 16,
+          right: 16,
+          left: 16,
+          borderRadius: 16,
+        },
+      }}
+    >
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={{
+          tabBarShowLabel: false,
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? "ios-home" : "ios-home-outline"}
+              size={24}
+              color="#5D66B8"
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Discover"
+        component={Discover}
+        options={{
+          tabBarShowLabel: false,
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? "planet" : "planet-outline"}
+              size={24}
+              color="#5D66B8"
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Favorites"
+        component={Favorites}
+        options={{
+          tabBarShowLabel: false,
+          tabBarIcon: ({ color, focused }) => (
+            <MaterialIcons
+              name={focused ? "favorite" : "favorite-outline"}
+              size={24}
+              color="#5D66B8"
+            />
+          ),
+        }}
+      />
+      {/* <Tab.Screen name="Reader" component={Reader} /> */}
+    </Tab.Navigator>
+  );
+}
+
+const Drawer = createDrawerNavigator();
+
+const Root = () => {
+  return (
+    <Drawer.Navigator initialRouteName="Home">
+      <Drawer.Screen name="Tabs" component={MyTabs} />
+      <Drawer.Screen name="Discover" component={Discover} />
+      {/* <Drawer.Screen name="Reader" component={Reader} /> */}
+    </Drawer.Navigator>
+  );
+};
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      {/* <MyTabs /> */}
+      <Stack.Navigator>
+        {/* <Stack.Screen name="Home" component={Home} /> */}
+        <Stack.Screen
+          name="Root"
+          component={MyTabs}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen name="Reader" component={Reader} />
+        <Stack.Screen name="Discover" component={Discover} />
+        {/* <Stack.Screen name="Tabs" component={MyTabs} /> */}
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
