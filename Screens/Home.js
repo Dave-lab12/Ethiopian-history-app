@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,11 +10,15 @@ import {
   ScrollView,
   Dimensions,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { AntDesign } from "@expo/vector-icons";
 
+import { useNavigation } from "@react-navigation/native";
+import { AntDesign } from "@expo/vector-icons";
+import db from "../Connector";
 function Home() {
+  const [books, setBooks] = useState();
+  useEffect(() => {
+    db.collection("Books").get();
+  }, []);
   const navigation = useNavigation();
   return (
     <View style={styles.HomeContainer}>

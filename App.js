@@ -68,7 +68,6 @@ function MyTabs() {
           ),
         }}
       />
-      {/* <Tab.Screen name="Reader" component={Reader} /> */}
     </Tab.Navigator>
   );
 }
@@ -80,7 +79,6 @@ const Root = () => {
     <Drawer.Navigator initialRouteName="Home">
       <Drawer.Screen name="Tabs" component={MyTabs} />
       <Drawer.Screen name="Discover" component={Discover} />
-      {/* <Drawer.Screen name="Reader" component={Reader} /> */}
     </Drawer.Navigator>
   );
 };
@@ -89,17 +87,18 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      {/* <MyTabs /> */}
       <Stack.Navigator>
-        {/* <Stack.Screen name="Home" component={Home} /> */}
         <Stack.Screen
           name="Root"
           component={MyTabs}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="Reader" component={Reader} />
+        <Stack.Screen
+          name="Reader"
+          component={Reader}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen name="Discover" component={Discover} />
-        {/* <Stack.Screen name="Tabs" component={MyTabs} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );
