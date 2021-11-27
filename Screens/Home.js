@@ -15,9 +15,14 @@ import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 import db from "../Connector";
 function Home() {
-  const [books, setBooks] = useState();
   useEffect(() => {
-    db.collection("Books").get();
+    db.collection("Books")
+      .get()
+      .then((snapshot) => {
+        snapshot.docs.forEach((doc) => {
+          console.log(doc.data());
+        });
+      });
   }, []);
   const navigation = useNavigation();
   return (
