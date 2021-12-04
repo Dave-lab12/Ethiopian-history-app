@@ -7,31 +7,26 @@ import {
   Image,
   TextInput,
   Pressable,
-  ScrollView,
   Dimensions,
+  ScrollView,
+  FlatList,
 } from "react-native";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
-import db from "../Connector";
+import Card from "../component/card";
+import { data } from "../data/data.js";
 function Home() {
-  useEffect(() => {
-    db.collection("Books")
-      .get()
-      .then((snapshot) => {
-        snapshot.docs.forEach((doc) => {
-          console.log(doc.data());
-        });
-      });
-  }, []);
   const navigation = useNavigation();
   return (
-    <View style={styles.HomeContainer}>
+    <ScrollView style={styles.HomeContainer}>
       <ImageBackground
         style={styles.imgBackground}
         source={require("../assets/background.png")}
       />
-      <ScrollView>
+      <StatusBar style="light" />
+      <View>
         <Image style={styles.logo} source={require("../assets/logo.png")} />
         <View style={styles.searchContainer}>
           <TextInput
@@ -56,89 +51,27 @@ function Home() {
             <View style={styles.progressBar}></View>
           </View>
         </View>
+
         <Text style={styles.forYou}>For You </Text>
-        <View style={styles.forYouContainer}>
-          <View style={styles.cards}>
-            <Image
-              style={styles.cardImage}
-              source={require("../assets/axum.jpg")}
-            />
-            <View style={styles.cardText}>
-              <Text style={styles.bookTitle}>Lalibela civilization</Text>
-              <Text style={styles.subTitle}>1990-1999</Text>
-            </View>
-          </View>
-          <View style={styles.cards}>
-            <Image
-              style={styles.cardImage}
-              source={require("../assets/go.jpg")}
-            />
-            <View style={styles.cardText}>
-              <Text style={styles.bookTitle}>Gondar civilization</Text>
-              <Text style={styles.subTitle}>1990-1999</Text>
-            </View>
-          </View>
-          <View style={styles.cards}>
-            <Image
-              style={styles.cardImage}
-              source={require("../assets/lal.jpg")}
-            />
-            <View style={styles.cardText}>
-              <Text style={styles.bookTitle}>Gondar civilization</Text>
-              <Text style={styles.subTitle}>1990-1999</Text>
-            </View>
-          </View>
-          <View style={styles.cards}>
-            <Image
-              style={styles.cardImage}
-              source={require("../assets/co.jpg")}
-            />
-            <View style={styles.cardText}>
-              <Text style={styles.bookTitle}>Gondar civilization</Text>
-              <Text style={styles.subTitle}>1990-1999</Text>
-            </View>
-          </View>
-          <View style={styles.cards}>
-            <Image
-              style={styles.cardImage}
-              source={require("../assets/somal.jpg")}
-            />
-            <View style={styles.cardText}>
-              <Text style={styles.bookTitle}>Gondar civilization</Text>
-              <Text style={styles.subTitle}>1990-1999</Text>
-            </View>
-          </View>
-          <Pressable
-            style={styles.cards}
-            onPress={() =>
-              navigation.navigate("Reader", {
-                itemId: 86,
-                otherParam: "anything you want here",
-              })
-            }
-          >
-            <Image
-              style={styles.cardImage}
-              source={require("../assets/add.jpg")}
-            />
-            <View style={styles.cardText}>
-              <Text style={styles.bookTitle}>Gondar civilization</Text>
-              <Text style={styles.subTitle}>1990-1999</Text>
-            </View>
-          </Pressable>
+        <View>
+          <FlatList
+            data={data}
+            keyExtractor={(item, index) => "key" + index}
+            renderItem={({ item }) => {
+              return (
+                <Card
+                  title={item.title}
+                  year={item.year}
+                  description={item.description}
+                  image={item.image}
+                />
+              );
+            }}
+            numColumns={2}
+          />
         </View>
-        {/* <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("Reader", {
-              itemId: 86,
-              otherParam: "anything you want here",
-            })
-          }
-        >
-          <Text>Read a book</Text>
-        </TouchableOpacity> */}
-      </ScrollView>
-    </View>
+      </View>
+    </ScrollView>
   );
 }
 
@@ -146,7 +79,7 @@ export default Home;
 
 const styles = StyleSheet.create({
   HomeContainer: {
-    flex: 1,
+    // flex: 1,
   },
   logo: {
     marginTop: "10%",
@@ -253,28 +186,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   forYouContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-  },
-  cards: {
-    marginHorizontal: 15,
-  },
-  cardImage: {
-    width: 150,
-    height: 150,
-    borderRadius: 10,
-  },
-  bookTitle: {
-    fontWeight: "bold",
-    margin: 5,
-    fontSize: 12,
-    textAlign: "center",
-    color: "#4D4D4D",
-  },
-  subTitle: {
-    textAlign: "center",
-    color: "#4D4D4D",
-    fontSize: 12,
-    marginBottom: 6,
+    // flex: 1,
+    // flexDirection: "row",
+    // flexWrap: "wrap",
   },
 });

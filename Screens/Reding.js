@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   ScrollView,
@@ -8,8 +8,23 @@ import {
   Button,
 } from "react-native";
 import { Ionicons, AntDesign, Feather } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 function Reader({ route, navigation }) {
+  const { itemId, otherParam } = route.params;
+  const nav = useNavigation();
+  // { route, navigation }
   // const { itemId, otherParam } = route.params;
+  const [favorites, setFavorites] = useState([]);
+  const getData = async () => {
+    return await AsyncStorage.getItem(isDark);
+  };
+  const dark = async () => {
+    await AsyncStorage.setItem("Favorites", {});
+  };
+  // console.log(otherParam);
+  const [title, year, description, image] = otherParam;
+  console.log(title, year, description, image);
   return (
     <>
       <ScrollView style={styles.readerContainer}>
@@ -18,58 +33,25 @@ function Reader({ route, navigation }) {
             name="arrow-back"
             size={24}
             color="black"
-            onPress={() => navigation.navigate("Home")}
+            onPress={() => nav.navigate("Home")}
           />
           <View style={styles.darkMode}>
-            <Feather name="moon" size={24} color="black" />
+            <Feather
+              name="moon"
+              size={24}
+              color="black"
+              onPress={() => dark()}
+            />
           </View>
         </View>
         <View style={styles.contentContainer}>
           <View style={styles.imageContainer}>
-            <Image
-              style={styles.contentImage}
-              source={require("../assets/lal.jpg")}
-            />
+            <Image style={styles.contentImage} source={image} />
           </View>
           <View style={styles.textContainer}>
-            <Text style={styles.headlineText}>History Of Minilik II</Text>
+            <Text style={styles.headlineText}>{title}</Text>
             <Text style={styles.subHeadline}>who is minilk II</Text>
-            <Text style={styles.paragraph}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut cursus
-              leo ullamcorper fusce ornare eu. Malesuada et ut maecenas ut massa
-              enim sit justo, gravida.Lorem ipsum dolor sit amet, consectetur
-              adipiscing elit. Ut cursus leo ullamcorper fusce ornare eu.
-              Malesuada et ut maecenas ut massa enim sit justo, gravida. Tempus
-              nec sed mauris nam. Sodales at a lobortis pellentesquLorem ipsum
-              dolor sit amet, consectetur adipiscing elit. Ut cursus leo
-              ullamcorper fusce ornare eu. Malesuada et ut maecenas ut massa
-              enim sit justo, gravida. Tempus nec sed mauris nam. Sodales at
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut cursus
-              leo ullamcorper fusce ornare eu. Malesuada et ut maecenas ut massa
-              enim sit justo, gravida. Tempus nec sed mauris nam. Sodales at a
-              lobortis pellentesquLorem ipsum dolor sit amet, consectetur
-              adipiscing elit. Ut cursus leo ullamcorper fusce ornare eu.
-              Malesuada et ut maecenas ut massa enim sit justo, gravida. Tempus
-              nec sed mauris nam. Sodales at Lorem ipsum dolor sit amet,
-              consectetur adipiscing elit. Ut cursus leo ullamcorper fusce
-              ornare eu. Malesuada et ut maecenas ut massa enim sit justo,
-              gravida. Tempus nec sed mauris nam. Sodales at a lobortis
-              pellentesquLorem ipsum dolor sit amet, consectetur adipiscing
-              elit. Ut cursus leo ullamcorper fusce ornare eu. Malesuada et ut
-              maecenas ut massa enim sit justo, gravida. Tempus nec sed mauris
-              nam. Sodales at Tempus nec sed mauris nam. Sodales at a lobortis
-              pellentesquLorem ipsum dolor sit amet, consectetur adipiscing
-              elit. Ut cursus leo ullamcorper fusce ornare eu. Malesuada et ut
-              maecenas ut massa enim sit justo, gravida. Tempus nec sed mauris
-              nam. Sodales at a lobortis pellLorem ipsum dolor sit amet,
-              consectetur adipiscing elit. Ut cursus leo ullamcorper fusce
-              ornare eu. Malesuada et ut maecenas ut massa enim sit justo,
-              gravida. Tempus nec sed mauris nam. Sodales at a lobortis
-              pellLorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
-              cursus leo ullamcorper fusce ornare eu. Malesuada et ut maecenas
-              ut massa enim sit justo, gravida. Tempus nec sed mauris nam.
-              Sodales at a lobortis pelle eros commodo mattis fermentum velit.
-            </Text>
+            <Text style={styles.paragraph}>{description.title}</Text>
           </View>
         </View>
       </ScrollView>
@@ -78,6 +60,7 @@ function Reader({ route, navigation }) {
         name="hearto"
         size={24}
         color="black"
+        onPress={() => {}}
       />
     </>
   );

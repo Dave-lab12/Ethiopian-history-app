@@ -4,6 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { LogBox } from "react-native";
 import Home from "./Screens/Home";
 import Reader from "./Screens/Reding";
 import Discover from "./Screens/Discover";
@@ -11,6 +12,7 @@ import Favorites from "./Screens/Favorites";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 const Tab = createBottomTabNavigator();
 
+LogBox.ignoreLogs(["Setting a timer for a long period of time"]);
 function MyTabs() {
   return (
     <Tab.Navigator
