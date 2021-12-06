@@ -2,8 +2,15 @@ import React from "react";
 import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Favorites = () => {
+  const getData = async () => {
+    try {
+      console.log(await AsyncStorage.getItem("favorites"));
+    } catch (e) {}
+  };
+  getData();
   return (
     <ScrollView style={styles.favoriteContainer}>
       <View style={styles.favoriteTitle}>
@@ -15,6 +22,7 @@ const Favorites = () => {
         />
         <Text style={styles.heading}>Favorites</Text>
       </View>
+      {/* {getData()} */}
       <View style={styles.cardsContainer}>
         <View style={styles.card}>
           <Image

@@ -6,28 +6,54 @@ import {
   StyleSheet,
   Image,
   Button,
+  Dimensions,
 } from "react-native";
+
 import { Ionicons, AntDesign, Feather } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 function Reader({ route, navigation }) {
   const { itemId, otherParam } = route.params;
   const nav = useNavigation();
-  // { route, navigation }
-  // const { itemId, otherParam } = route.params;
-  const [favorites, setFavorites] = useState([]);
   const getData = async () => {
     return await AsyncStorage.getItem(isDark);
   };
   const dark = async () => {
     await AsyncStorage.setItem("Favorites", {});
   };
-  // console.log(otherParam);
+  const [progressCount, setProgressCount] = useState(0);
+  const scrollView_height = 0;
+  const scrollViewContent_height = 0;
   const [title, year, description, image] = otherParam;
-  console.log(title, year, description, image);
+
+  const handleFavorites = async () => {
+    console.warn("hmm");
+    try {
+      await AsyncStorage.setItem("favorites", JSON.stringify(otherParam)).then(
+        (res) => {
+          console.log(res);
+        }
+      );
+      console.log("hmm");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  function handleScroll(e) {
+    setProgressCount(
+      Math.abs(
+        e.nativeEvent.contentOffset.y /
+          (scrollViewContent_height - scrollView_height)
+      )
+    );
+  }
+  const onLayout = (e) => {
+    console.log(e.nativeEvent.layout.height, "ley");
+  };
+  // console.log(count);
   return (
-    <>
-      <ScrollView style={styles.readerContainer}>
+    <View>
+      <ScrollView style={styles.readerContainer} onScroll={handleScroll}>
         <View style={styles.topNavigation}>
           <Ionicons
             name="arrow-back"
@@ -60,9 +86,11 @@ function Reader({ route, navigation }) {
         name="hearto"
         size={24}
         color="black"
-        onPress={() => {}}
+        onPress={() => {
+          handleFavorites();
+        }}
       />
-    </>
+    </View>
   );
 }
 
