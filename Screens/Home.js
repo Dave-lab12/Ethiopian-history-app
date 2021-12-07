@@ -19,6 +19,8 @@ import Card from "../component/card";
 import { data } from "../data/data.js";
 function Home() {
   const navigation = useNavigation();
+  // console.log(data);
+
   return (
     <ScrollView style={styles.HomeContainer}>
       <ImageBackground
@@ -64,6 +66,8 @@ function Home() {
                   year={item.year}
                   description={item.description}
                   image={item.image}
+                  favorites={item.favorites}
+                  id={item.id}
                 />
               );
             }}

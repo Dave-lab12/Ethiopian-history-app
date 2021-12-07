@@ -2,15 +2,14 @@ import React from "react";
 import { View, Text, Image, StyleSheet, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-function Card({ title, year, description, image }) {
+function Card({ id, title, year, description, image, favorites }) {
   const navigation = useNavigation();
   return (
     <Pressable
       style={styles.cards}
       onPress={() =>
         navigation.navigate("Reader", {
-          itemId: 86,
-          otherParam: [title, year, description, image],
+          otherParam: [title, year, description, image, favorites, id],
         })
       }
     >

@@ -1,59 +1,73 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   ScrollView,
   Text,
   StyleSheet,
   Image,
-  Button,
-  Dimensions,
+  Animated,
 } from "react-native";
+import LottieView from "lottie-react-native";
 
 import { Ionicons, AntDesign, Feather } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import { data } from "../data/data";
 function Reader({ route, navigation }) {
-  const { itemId, otherParam } = route.params;
+  const { otherParam } = route.params;
   const nav = useNavigation();
-  const getData = async () => {
-    return await AsyncStorage.getItem(isDark);
+
+  const [title, year, description, image, favorites, id] = otherParam;
+
+  const [isFav, setIsFav] = useState(false);
+  const progress = useRef(new Animated.Value(0)).current;
+  const handleLikeAnimation = () => {
+    Animated.timing(progress, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
   };
-  const dark = async () => {
-    await AsyncStorage.setItem("Favorites", {});
-  };
-  const [progressCount, setProgressCount] = useState(0);
-  const scrollView_height = 0;
-  const scrollViewContent_height = 0;
-  const [title, year, description, image] = otherParam;
+  useEffect(() => {
+    const d = data.filter((p) => p.id === id);
+    if (d[0].favorites === "true") {
+      setIsFav(true);
+    } else {
+      setIsFav(false);
+    }
+  }, []);
+  useEffect(() => {
+    if (isFav) {
+      animation.current.play(168, 168);
+    } else {
+      animation.current.play(1, 1);
+    }
+  }, [isFav]);
+  console.log(isFav);
+  const animation = React.useRef(null);
 
   const handleFavorites = async () => {
-    console.warn("hmm");
-    try {
-      await AsyncStorage.setItem("favorites", JSON.stringify(otherParam)).then(
-        (res) => {
-          console.log(res);
+    if (!isFav) {
+      data = data.forEach((per) => {
+        if (per.id === id) {
+          setIsFav(true);
+          per.favorites = "true";
         }
-      );
-      console.log("hmm");
-    } catch (error) {
-      console.log(error);
+      });
+    } else {
+      data = data.forEach((per) => {
+        if (per.id === id) {
+          setIsFav(false);
+          per.favorites = "false";
+          console.log("hmm");
+        }
+      });
     }
   };
-  function handleScroll(e) {
-    setProgressCount(
-      Math.abs(
-        e.nativeEvent.contentOffset.y /
-          (scrollViewContent_height - scrollView_height)
-      )
-    );
-  }
-  const onLayout = (e) => {
-    console.log(e.nativeEvent.layout.height, "ley");
-  };
-  // console.log(count);
+
   return (
     <View>
-      <ScrollView style={styles.readerContainer} onScroll={handleScroll}>
+      <ScrollView style={styles.readerContainer}>
         <View style={styles.topNavigation}>
           <Ionicons
             name="arrow-back"
@@ -81,15 +95,27 @@ function Reader({ route, navigation }) {
           </View>
         </View>
       </ScrollView>
-      <AntDesign
+      <LottieView
+        ref={animation}
         style={styles.floatingStylesBtn}
-        name="hearto"
+        source={require("../assets/like.json")}
+        resizeMode="cover"
+        autoPlay={true}
+        loop={false}
+        onPress={() => {
+          // handleFavorites();
+          // console.log("hmms");
+        }}
+      />
+      {/* <AntDesign
+        style={styles.floatingStylesBtn}
+        name={`${isFav ? "heart" : "hearto"}`}
         size={24}
         color="black"
         onPress={() => {
           handleFavorites();
         }}
-      />
+      /> */}
     </View>
   );
 }
@@ -131,12 +157,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   floatingStylesBtn: {
-    color: "#fff",
-    padding: 15,
-    borderRadius: 30,
-    backgroundColor: "#5D66B8",
+    backgroundColor: "rgba(255,255,255,0.2)",
     position: "absolute",
     bottom: 10,
     right: 10,
+    height: 120,
+    width: 120,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
   },
 });

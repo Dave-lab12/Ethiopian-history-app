@@ -1,16 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { data } from "../data/data.js";
+import { useIsFocused } from "@react-navigation/native";
+import FavCard from "../component/favCard.jsx";
 const Favorites = () => {
-  const getData = async () => {
-    try {
-      console.log(await AsyncStorage.getItem("favorites"));
-    } catch (e) {}
-  };
-  getData();
+  const [favorites, setFavorites] = useState(data);
+  const IsFocused = useIsFocused();
+
+  useEffect(() => {
+    if (IsFocused) {
+    }
+  }, [IsFocused]);
+
+  const favoriteList = favorites.filter((fav) => {
+    if (fav.favorites === "true") {
+      return fav;
+    }
+  });
   return (
     <ScrollView style={styles.favoriteContainer}>
       <View style={styles.favoriteTitle}>
@@ -22,84 +29,31 @@ const Favorites = () => {
         />
         <Text style={styles.heading}>Favorites</Text>
       </View>
-      {/* {getData()} */}
       <View style={styles.cardsContainer}>
-        <View style={styles.card}>
-          <Image
-            style={styles.cardImage}
-            source={require("../assets/harr.jpg")}
-          />
-          <LinearGradient
-            style={styles.overlay}
-            colors={["transparent", "rgba(93,102,184,1)"]}
-          >
-            <Text style={styles.overlayText}>History of Fasil</Text>
-          </LinearGradient>
-        </View>
-        <View style={styles.card}>
-          <Image
-            style={styles.cardImage}
-            source={require("../assets/go.jpg")}
-          />
-          <LinearGradient
-            style={styles.overlay}
-            colors={["transparent", "rgba(93,102,184,1)"]}
-          >
-            <Text style={styles.overlayText}>History of Fasil</Text>
-          </LinearGradient>
-        </View>
-        <View style={styles.card}>
-          <Image
-            style={styles.cardImage}
-            source={require("../assets/adn.jpg")}
-          />
-          <LinearGradient
-            style={styles.overlay}
-            colors={["transparent", "rgba(93,102,184,1)"]}
-          >
-            <Text style={styles.overlayText}>History of Fasil</Text>
-          </LinearGradient>
-        </View>
-        <View style={styles.card}>
-          <Image
-            style={styles.cardImage}
-            source={require("../assets/muslim.jpg")}
-          />
-          <LinearGradient
-            style={styles.overlay}
-            colors={["transparent", "rgba(93,102,184,1)"]}
-          >
-            <Text style={styles.overlayText}>History of Fasil</Text>
-          </LinearGradient>
-        </View>
-        <View style={styles.card}>
-          <Image
-            style={styles.cardImage}
-            source={require("../assets/chr.jpg")}
-          />
-          <LinearGradient
-            style={styles.overlay}
-            colors={["transparent", "rgba(93,102,184,1)"]}
-          >
-            <Text style={styles.overlayText}>History of Fasil</Text>
-          </LinearGradient>
-        </View>
-        <View style={styles.card}>
-          <Image
-            style={styles.cardImage}
-            source={require("../assets/add.jpg")}
-          />
-          <LinearGradient
-            style={styles.overlay}
-            colors={[
-              "transparent",
-              "rgba(196,196,196,0.8)",
-              "rgba(93,102,184,1)",
-            ]}
-          >
-            <Text style={styles.overlayText}>History of Fasil</Text>
-          </LinearGradient>
-        </View>
+        {favoriteList.length > 0 ? (
+          data.map((fav) => {
+            if (fav.favorites === "true") {
+              return (
+                <FavCard
+                  title={fav.title}
+                  year={fav.year}
+                  description={fav.description}
+                  image={fav.image}
+                  favorites={fav.favorites}
+                  id={fav.id}
+                />
+              );
+            }
+          })
+        ) : (
+          <View>
+            <Image
+              style={styles.emptyImg}
+              source={require("../assets/empty.png")}
+            />
+            <Text style={styles.emptyText}>You have no Favorites</Text>
+          </View>
+        )}
       </View>
     </ScrollView>
   );
@@ -131,29 +85,15 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     marginTop: 30,
   },
-  card: {
-    borderRadius: 20,
-    margin: 5,
-    width: "100%",
-  },
-  cardImage: {
-    height: 220,
-    borderRadius: 20,
-    width: "100%",
-  },
-  overlay: {
-    width: "100%",
 
-    height: 220,
-    position: "absolute",
-    justifyContent: "flex-end",
-    borderRadius: 20,
+  emptyImg: {
+    width: 350,
+    height: 350,
   },
-  overlayText: {
-    // alignSelf: "center",
-    fontSize: 30,
-    fontWeight: "bold",
-    color: "white",
-    margin: 15,
+  emptyText: {
+    fontSize: 20,
+    textAlign: "center",
+    textTransform: "capitalize",
+    color: "rgba(20,20,20,0.5)",
   },
 });
